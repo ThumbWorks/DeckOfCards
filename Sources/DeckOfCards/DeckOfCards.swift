@@ -3,6 +3,6 @@ struct DeckOfCards {
 }
 
 import UIKit
-class DeckView: UIView {
+public class DeckView: UIView {
     
 }
