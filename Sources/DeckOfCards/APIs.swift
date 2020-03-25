@@ -7,7 +7,7 @@
 import Foundation
 
 open class SwaggerClientAPI {
-    public static var basePath = "https://virtserver.swaggerhub.com/Thumbworks/DeckOfCards/1.0.0"
+    public static var basePath = "https://deckofcardsapi.com/api"
     public static var credential: URLCredential?
     public static var customHeaders: [String:String] = [:]
     public static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory()
