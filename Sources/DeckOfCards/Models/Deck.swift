@@ -14,12 +14,12 @@ public struct Deck: Codable {
     public var success: Bool
     public var error: String?
     public var deckId: String
-    public var shuffled: Bool?
+    public var shuffled: Bool
     public var remaining: Int
     public var cards: [Card]?
     public var piles: JSONValue?
 
-    public init(success: Bool, error: String?, deckId: String, shuffled: Bool?, remaining: Int, cards: [Card]?, piles: JSONValue?) {
+    public init(success: Bool, error: String?, deckId: String, shuffled: Bool, remaining: Int, cards: [Card]?, piles: JSONValue?) {
         self.success = success
         self.error = error
         self.deckId = deckId

@@ -18,8 +18,8 @@ open class PileAPI {
      - parameter cards: (query) Piles can be used for discarding, players hands, or whatever else. Piles are created on the fly, just give a pile a name and add a drawn card to the pile. If the pile didn&#x27;t exist before, it does now. After a card has been drawn from the deck it can be moved from pile to pile. 
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func deckDeckIdPilePileNameAddGet(deckId: String, pileName: String, cards: [String], completion: @escaping ((_ data: Void?,_ error: Error?) -> Void)) {
-        deckDeckIdPilePileNameAddGetWithRequestBuilder(deckId: deckId, pileName: pileName, cards: cards).execute { (response, error) -> Void in
+    open class func addToPile(deckId: String, pileName: String, cards: [String], completion: @escaping ((_ data: Void?,_ error: Error?) -> Void)) {
+        addToPileWithRequestBuilder(deckId: deckId, pileName: pileName, cards: cards).execute { (response, error) -> Void in
             if error == nil {
                 completion((), error)
             } else {
@@ -40,7 +40,7 @@ open class PileAPI {
 
      - returns: RequestBuilder<Void> 
      */
-    open class func deckDeckIdPilePileNameAddGetWithRequestBuilder(deckId: String, pileName: String, cards: [String]) -> RequestBuilder<Void> {
+    open class func addToPileWithRequestBuilder(deckId: String, pileName: String, cards: [String]) -> RequestBuilder<Void> {
         var path = "/deck/{deck_id}/pile/{pile_name}/add/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -61,7 +61,7 @@ open class PileAPI {
     }
 
     /**
-     List cards in piles
+     Draw card from pile
 
      - parameter deckId: (path) List the contents of a given pile within a given deck. Note that this will not work with multiple decks. 
      - parameter pileName: (path) A name describing a pile. 
@@ -69,15 +69,15 @@ open class PileAPI {
      - parameter cards: (query) Pass the card codes you want to use using the cards parameter. Separate the card codes with commas, and each card code is a just a two character case-insensitive string. The value, one of A (for an ace), 2, 3, 4, 5, 6, 7, 8, 9, 0 (for a ten), J (jack), Q (queen), or K (king); The suit, one of S (Spades), D (Diamonds), C (Clubs), or H (Hearts). (optional)
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func deckDeckIdPilePileNameDrawGet(deckId: String, pileName: String, count: Int? = nil, cards: [String]? = nil, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
-        deckDeckIdPilePileNameDrawGetWithRequestBuilder(deckId: deckId, pileName: pileName, count: count, cards: cards).execute { (response, error) -> Void in
+    open class func drawCardFromPile(deckId: String, pileName: String, count: Int? = nil, cards: [String]? = nil, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
+        drawCardFromPileWithRequestBuilder(deckId: deckId, pileName: pileName, count: count, cards: cards).execute { (response, error) -> Void in
             completion(response?.body, error)
         }
     }
 
 
     /**
-     List cards in piles
+     Draw card from pile
      - GET /deck/{deck_id}/pile/{pile_name}/draw/
      - 
 
@@ -107,7 +107,7 @@ open class PileAPI {
 
      - returns: RequestBuilder<Deck> 
      */
-    open class func deckDeckIdPilePileNameDrawGetWithRequestBuilder(deckId: String, pileName: String, count: Int? = nil, cards: [String]? = nil) -> RequestBuilder<Deck> {
+    open class func drawCardFromPileWithRequestBuilder(deckId: String, pileName: String, count: Int? = nil, cards: [String]? = nil) -> RequestBuilder<Deck> {
         var path = "/deck/{deck_id}/pile/{pile_name}/draw/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -129,21 +129,21 @@ open class PileAPI {
     }
 
     /**
-     List cards in piles
+     List cards in pile
 
      - parameter deckId: (path) List the contents of a given pile within a given deck. Note that this will not work with multiple decks. 
      - parameter pileName: (path) A name describing a pile. 
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func deckDeckIdPilePileNameListGet(deckId: String, pileName: String, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
-        deckDeckIdPilePileNameListGetWithRequestBuilder(deckId: deckId, pileName: pileName).execute { (response, error) -> Void in
+    open class func listCardsInPile(deckId: String, pileName: String, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
+        listCardsInPileWithRequestBuilder(deckId: deckId, pileName: pileName).execute { (response, error) -> Void in
             completion(response?.body, error)
         }
     }
 
 
     /**
-     List cards in piles
+     List cards in pile
      - GET /deck/{deck_id}/pile/{pile_name}/list/
      - 
 
@@ -171,7 +171,7 @@ open class PileAPI {
 
      - returns: RequestBuilder<Deck> 
      */
-    open class func deckDeckIdPilePileNameListGetWithRequestBuilder(deckId: String, pileName: String) -> RequestBuilder<Deck> {
+    open class func listCardsInPileWithRequestBuilder(deckId: String, pileName: String) -> RequestBuilder<Deck> {
         var path = "/deck/{deck_id}/pile/{pile_name}/list/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -196,8 +196,8 @@ open class PileAPI {
      - parameter pileName: (path) A name describing a pile. 
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func deckDeckIdPilePileNameShuffleGet(deckId: String, pileName: String, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
-        deckDeckIdPilePileNameShuffleGetWithRequestBuilder(deckId: deckId, pileName: pileName).execute { (response, error) -> Void in
+    open class func shufflePile(deckId: String, pileName: String, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
+        shufflePileWithRequestBuilder(deckId: deckId, pileName: pileName).execute { (response, error) -> Void in
             completion(response?.body, error)
         }
     }
@@ -232,7 +232,7 @@ open class PileAPI {
 
      - returns: RequestBuilder<Deck> 
      */
-    open class func deckDeckIdPilePileNameShuffleGetWithRequestBuilder(deckId: String, pileName: String) -> RequestBuilder<Deck> {
+    open class func shufflePileWithRequestBuilder(deckId: String, pileName: String) -> RequestBuilder<Deck> {
         var path = "/deck/{deck_id}/pile/{pile_name}/shuffle/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""

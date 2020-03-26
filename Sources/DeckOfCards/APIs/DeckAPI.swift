@@ -16,8 +16,8 @@ open class DeckAPI {
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func deckDeckIdDrawGet(deckId: String, completion: @escaping ((_ data: Void?,_ error: Error?) -> Void)) {
-        deckDeckIdDrawGetWithRequestBuilder(deckId: deckId).execute { (response, error) -> Void in
+    open class func draw(deckId: String, completion: @escaping ((_ data: Void?,_ error: Error?) -> Void)) {
+        drawWithRequestBuilder(deckId: deckId).execute { (response, error) -> Void in
             if error == nil {
                 completion((), error)
             } else {
@@ -36,7 +36,7 @@ open class DeckAPI {
 
      - returns: RequestBuilder<Void> 
      */
-    open class func deckDeckIdDrawGetWithRequestBuilder(deckId: String) -> RequestBuilder<Void> {
+    open class func drawWithRequestBuilder(deckId: String) -> RequestBuilder<Void> {
         var path = "/deck/{deck_id}/draw/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
