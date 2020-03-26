@@ -18,13 +18,9 @@ open class PileAPI {
      - parameter cards: (query) Piles can be used for discarding, players hands, or whatever else. Piles are created on the fly, just give a pile a name and add a drawn card to the pile. If the pile didn&#x27;t exist before, it does now. After a card has been drawn from the deck it can be moved from pile to pile. 
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func addToPile(deckId: String, pileName: String, cards: [String], completion: @escaping ((_ data: Void?,_ error: Error?) -> Void)) {
+    open class func addToPile(deckId: String, pileName: String, cards: [String], completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
         addToPileWithRequestBuilder(deckId: deckId, pileName: pileName, cards: cards).execute { (response, error) -> Void in
-            if error == nil {
-                completion((), error)
-            } else {
-                completion(nil, error)
-            }
+            completion(response?.body, error)
         }
     }
 
@@ -34,13 +30,32 @@ open class PileAPI {
      - GET /deck/{deck_id}/pile/{pile_name}/add/
      - 
 
+     - examples: [{contentType=application/json, example={
+  "cards" : [ {
+    "image" : "image",
+    "code" : "code",
+    "suit" : "suit",
+    "value" : "value"
+  }, {
+    "image" : "image",
+    "code" : "code",
+    "suit" : "suit",
+    "value" : "value"
+  } ],
+  "success" : true,
+  "shuffled" : true,
+  "piles" : { },
+  "error" : "error",
+  "deck_id" : "deck_id",
+  "remaining" : 0
+}}]
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
      - parameter pileName: (path) A name describing a pile. 
      - parameter cards: (query) Piles can be used for discarding, players hands, or whatever else. Piles are created on the fly, just give a pile a name and add a drawn card to the pile. If the pile didn&#x27;t exist before, it does now. After a card has been drawn from the deck it can be moved from pile to pile. 
 
-     - returns: RequestBuilder<Void> 
+     - returns: RequestBuilder<Deck> 
      */
-    open class func addToPileWithRequestBuilder(deckId: String, pileName: String, cards: [String]) -> RequestBuilder<Void> {
+    open class func addToPileWithRequestBuilder(deckId: String, pileName: String, cards: [String]) -> RequestBuilder<Deck> {
         var path = "/deck/{deck_id}/pile/{pile_name}/add/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -55,7 +70,7 @@ open class PileAPI {
                         "cards": cards
         ])
 
-        let requestBuilder: RequestBuilder<Void>.Type = SwaggerClientAPI.requestBuilderFactory.getNonDecodableBuilder()
+        let requestBuilder: RequestBuilder<Deck>.Type = SwaggerClientAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }

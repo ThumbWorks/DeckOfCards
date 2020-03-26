@@ -16,13 +16,9 @@ open class DeckAPI {
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func draw(deckId: String, completion: @escaping ((_ data: Void?,_ error: Error?) -> Void)) {
+    open class func draw(deckId: String, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
         drawWithRequestBuilder(deckId: deckId).execute { (response, error) -> Void in
-            if error == nil {
-                completion((), error)
-            } else {
-                completion(nil, error)
-            }
+            completion(response?.body, error)
         }
     }
 
@@ -32,11 +28,30 @@ open class DeckAPI {
      - GET /deck/{deck_id}/draw/
      - 
 
+     - examples: [{contentType=application/json, example={
+  "cards" : [ {
+    "image" : "image",
+    "code" : "code",
+    "suit" : "suit",
+    "value" : "value"
+  }, {
+    "image" : "image",
+    "code" : "code",
+    "suit" : "suit",
+    "value" : "value"
+  } ],
+  "success" : true,
+  "shuffled" : true,
+  "piles" : { },
+  "error" : "error",
+  "deck_id" : "deck_id",
+  "remaining" : 0
+}}]
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
 
-     - returns: RequestBuilder<Void> 
+     - returns: RequestBuilder<Deck> 
      */
-    open class func drawWithRequestBuilder(deckId: String) -> RequestBuilder<Void> {
+    open class func drawWithRequestBuilder(deckId: String) -> RequestBuilder<Deck> {
         var path = "/deck/{deck_id}/draw/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -46,7 +61,7 @@ open class DeckAPI {
 
         let url = URLComponents(string: URLString)
 
-        let requestBuilder: RequestBuilder<Void>.Type = SwaggerClientAPI.requestBuilderFactory.getNonDecodableBuilder()
+        let requestBuilder: RequestBuilder<Deck>.Type = SwaggerClientAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }
