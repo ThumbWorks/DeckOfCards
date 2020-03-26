@@ -11,7 +11,7 @@ import Alamofire
 
 open class DeckAPI {
     /**
-     Draw a card
+     Draw a card from a deck given a deck_id
 
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
      - parameter completion: completion handler to receive the data and the error objects
@@ -24,7 +24,7 @@ open class DeckAPI {
 
 
     /**
-     Draw a card
+     Draw a card from a deck given a deck_id
      - GET /deck/{deck_id}/draw/
      - 
 
