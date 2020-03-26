@@ -16,7 +16,7 @@ open class DeckAPI {
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func draw(deckId: String, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
+    open class func draw(deckId: String, completion: @escaping ((_ data: Cards?,_ error: Error?) -> Void)) {
         drawWithRequestBuilder(deckId: deckId).execute { (response, error) -> Void in
             completion(response?.body, error)
         }
@@ -39,19 +39,13 @@ open class DeckAPI {
     "code" : "code",
     "suit" : "suit",
     "value" : "value"
-  } ],
-  "success" : true,
-  "shuffled" : true,
-  "piles" : { },
-  "error" : "error",
-  "deck_id" : "deck_id",
-  "remaining" : 0
+  } ]
 }}]
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
 
-     - returns: RequestBuilder<Deck> 
+     - returns: RequestBuilder<Cards> 
      */
-    open class func drawWithRequestBuilder(deckId: String) -> RequestBuilder<Deck> {
+    open class func drawWithRequestBuilder(deckId: String) -> RequestBuilder<Cards> {
         var path = "/deck/{deck_id}/draw/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -61,7 +55,7 @@ open class DeckAPI {
 
         let url = URLComponents(string: URLString)
 
-        let requestBuilder: RequestBuilder<Deck>.Type = SwaggerClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<Cards>.Type = SwaggerClientAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }
