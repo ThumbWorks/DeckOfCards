@@ -11,6 +11,62 @@ import Alamofire
 
 open class DeckAPI {
     /**
+     Shuffle an existing deck of Cards
+
+     - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to shuffle. 
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    open class func deckShuffleExisting(deckId: String, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
+        deckShuffleExistingWithRequestBuilder(deckId: deckId).execute { (response, error) -> Void in
+            completion(response?.body, error)
+        }
+    }
+
+
+    /**
+     Shuffle an existing deck of Cards
+     - GET /deck/{deck_id}/shuffle/
+     - 
+
+     - examples: [{contentType=application/json, example={
+  "cards" : [ {
+    "image" : "image",
+    "code" : "code",
+    "suit" : "suit",
+    "value" : "value"
+  }, {
+    "image" : "image",
+    "code" : "code",
+    "suit" : "suit",
+    "value" : "value"
+  } ],
+  "success" : true,
+  "shuffled" : true,
+  "piles" : { },
+  "error" : "error",
+  "deck_id" : "deck_id",
+  "remaining" : 0
+}}]
+     - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to shuffle. 
+
+     - returns: RequestBuilder<Deck> 
+     */
+    open class func deckShuffleExistingWithRequestBuilder(deckId: String) -> RequestBuilder<Deck> {
+        var path = "/deck/{deck_id}/shuffle/"
+        let deckIdPreEscape = "\(deckId)"
+        let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        path = path.replacingOccurrences(of: "{deck_id}", with: deckIdPostEscape, options: .literal, range: nil)
+        let URLString = SwaggerClientAPI.basePath + path
+        let parameters: [String:Any]? = nil
+
+        let url = URLComponents(string: URLString)
+
+        let requestBuilder: RequestBuilder<Deck>.Type = SwaggerClientAPI.requestBuilderFactory.getBuilder()
+
+        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+    }
+
+    /**
      Draw a card from a deck given a deck_id.
 
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
@@ -109,62 +165,6 @@ open class DeckAPI {
         url?.queryItems = APIHelper.mapValuesToQueryItems([
                         "jokers_enabled": jokersEnabled
         ])
-
-        let requestBuilder: RequestBuilder<Deck>.Type = SwaggerClientAPI.requestBuilderFactory.getBuilder()
-
-        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
-    }
-
-    /**
-     Shuffle an existing deck of Cards.
-
-     - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to shuffle 
-     - parameter completion: completion handler to receive the data and the error objects
-     */
-    open class func shuffleExistingDeck(deckId: String, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
-        shuffleExistingDeckWithRequestBuilder(deckId: deckId).execute { (response, error) -> Void in
-            completion(response?.body, error)
-        }
-    }
-
-
-    /**
-     Shuffle an existing deck of Cards.
-     - GET /deck/{deck_id}/shuffle/
-     - 
-
-     - examples: [{contentType=application/json, example={
-  "cards" : [ {
-    "image" : "image",
-    "code" : "code",
-    "suit" : "suit",
-    "value" : "value"
-  }, {
-    "image" : "image",
-    "code" : "code",
-    "suit" : "suit",
-    "value" : "value"
-  } ],
-  "success" : true,
-  "shuffled" : true,
-  "piles" : { },
-  "error" : "error",
-  "deck_id" : "deck_id",
-  "remaining" : 0
-}}]
-     - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to shuffle 
-
-     - returns: RequestBuilder<Deck> 
-     */
-    open class func shuffleExistingDeckWithRequestBuilder(deckId: String) -> RequestBuilder<Deck> {
-        var path = "/deck/{deck_id}/shuffle/"
-        let deckIdPreEscape = "\(deckId)"
-        let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
-        path = path.replacingOccurrences(of: "{deck_id}", with: deckIdPostEscape, options: .literal, range: nil)
-        let URLString = SwaggerClientAPI.basePath + path
-        let parameters: [String:Any]? = nil
-
-        let url = URLComponents(string: URLString)
 
         let requestBuilder: RequestBuilder<Deck>.Type = SwaggerClientAPI.requestBuilderFactory.getBuilder()
 
