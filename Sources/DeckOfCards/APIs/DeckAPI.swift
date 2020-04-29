@@ -11,7 +11,7 @@ import Alamofire
 
 open class DeckAPI {
     /**
-     Draw a card from a deck given a deck_id
+     Draw a card from a deck given a deck_id.
 
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to draw a card from 
      - parameter completion: completion handler to receive the data and the error objects
@@ -24,7 +24,7 @@ open class DeckAPI {
 
 
     /**
-     Draw a card from a deck given a deck_id
+     Draw a card from a deck given a deck_id.
      - GET /deck/{deck_id}/draw/
      - 
 
@@ -116,7 +116,7 @@ open class DeckAPI {
     }
 
     /**
-     Shuffle an existing deck of Cards
+     Shuffle an existing deck of Cards.
 
      - parameter deckId: (path) The deck_id of the &#x60;Deck&#x60; which we wish to shuffle 
      - parameter completion: completion handler to receive the data and the error objects
@@ -129,7 +129,7 @@ open class DeckAPI {
 
 
     /**
-     Shuffle an existing deck of Cards
+     Shuffle an existing deck of Cards.
      - GET /deck/{deck_id}/shuffle/
      - 
 
@@ -216,6 +216,64 @@ open class DeckAPI {
      */
     open class func shuffleNewDeckWithRequestBuilder(deckCount: Int? = nil, cards: [String]? = nil) -> RequestBuilder<Deck> {
         let path = "/deck/new/shuffle/"
+        let URLString = SwaggerClientAPI.basePath + path
+        let parameters: [String:Any]? = nil
+        var url = URLComponents(string: URLString)
+        url?.queryItems = APIHelper.mapValuesToQueryItems([
+                        "deck_count": deckCount?.encodeToJSON(), 
+                        "cards": cards
+        ])
+
+        let requestBuilder: RequestBuilder<Deck>.Type = SwaggerClientAPI.requestBuilderFactory.getBuilder()
+
+        return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
+    }
+
+    /**
+     Shuffle a new deck of Cards
+
+     - parameter deckCount: (query) Add deck_count as a GET or POST parameter to define the number of Decks you want to use. Blackjack typically uses 6 decks. The default is 1. (optional)
+     - parameter cards: (query) If you want to use a partial deck, then you can pass the card codes you want to use using the cards parameter. Separate the card codes with commas, and each card code is a just a two character case-insensitive string. The value, one of A (for an ace), 2, 3, 4, 5, 6, 7, 8, 9, 0 (for a ten), J (jack), Q (queen), or K (king); The suit, one of S (Spades), D (Diamonds), C (Clubs), or H (Hearts). In this example, we are asking for a deck consisting of all the aces, twos, and kings. (optional)
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    open class func shuffleNewDeck2(deckCount: Int? = nil, cards: [String]? = nil, completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
+        shuffleNewDeck2WithRequestBuilder(deckCount: deckCount, cards: cards).execute { (response, error) -> Void in
+            completion(response?.body, error)
+        }
+    }
+
+
+    /**
+     Shuffle a new deck of Cards
+     - GET /deck/new/shuffledDeckss/
+     - 
+
+     - examples: [{contentType=application/json, example={
+  "cards" : [ {
+    "image" : "image",
+    "code" : "code",
+    "suit" : "suit",
+    "value" : "value"
+  }, {
+    "image" : "image",
+    "code" : "code",
+    "suit" : "suit",
+    "value" : "value"
+  } ],
+  "success" : true,
+  "shuffled" : true,
+  "piles" : { },
+  "error" : "error",
+  "deck_id" : "deck_id",
+  "remaining" : 0
+}}]
+     - parameter deckCount: (query) Add deck_count as a GET or POST parameter to define the number of Decks you want to use. Blackjack typically uses 6 decks. The default is 1. (optional)
+     - parameter cards: (query) If you want to use a partial deck, then you can pass the card codes you want to use using the cards parameter. Separate the card codes with commas, and each card code is a just a two character case-insensitive string. The value, one of A (for an ace), 2, 3, 4, 5, 6, 7, 8, 9, 0 (for a ten), J (jack), Q (queen), or K (king); The suit, one of S (Spades), D (Diamonds), C (Clubs), or H (Hearts). In this example, we are asking for a deck consisting of all the aces, twos, and kings. (optional)
+
+     - returns: RequestBuilder<Deck> 
+     */
+    open class func shuffleNewDeck2WithRequestBuilder(deckCount: Int? = nil, cards: [String]? = nil) -> RequestBuilder<Deck> {
+        let path = "/deck/new/shuffledDeckss/"
         let URLString = SwaggerClientAPI.basePath + path
         let parameters: [String:Any]? = nil
         var url = URLComponents(string: URLString)

@@ -18,7 +18,7 @@ open class PileAPI {
      - parameter cards: (query) Piles can be used for discarding, players hands, or whatever else. Piles are created on the fly, just give a pile a name and add a drawn card to the pile. If the pile didn&#x27;t exist before, it does now. After a card has been drawn from the deck it can be moved from pile to pile. 
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func addToPile(deckId: String, pileName: String, cards: [String], completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
+    open class func addToPile(deckId: String, pileName: String, cards: [Card], completion: @escaping ((_ data: Deck?,_ error: Error?) -> Void)) {
         addToPileWithRequestBuilder(deckId: deckId, pileName: pileName, cards: cards).execute { (response, error) -> Void in
             completion(response?.body, error)
         }
@@ -55,7 +55,7 @@ open class PileAPI {
 
      - returns: RequestBuilder<Deck> 
      */
-    open class func addToPileWithRequestBuilder(deckId: String, pileName: String, cards: [String]) -> RequestBuilder<Deck> {
+    open class func addToPileWithRequestBuilder(deckId: String, pileName: String, cards: [Card]) -> RequestBuilder<Deck> {
         var path = "/deck/{deck_id}/pile/{pile_name}/add/"
         let deckIdPreEscape = "\(deckId)"
         let deckIdPostEscape = deckIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
